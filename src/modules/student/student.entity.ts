@@ -1,10 +1,10 @@
 import { Column, Entity, ManyToMany } from 'typeorm'
 
-import { CommonEntity } from 'src/base/shared/entities/common.entity'
+import { SoftEntity } from 'src/base/shared/entities/soft.entity'
 import { Discipline } from 'src/modules/disciplines/entities/discipline.entity'
 
 @Entity({ name: 'students' })
-export class Student extends CommonEntity {
+export class Student extends SoftEntity {
   @Column()
   name: string
 

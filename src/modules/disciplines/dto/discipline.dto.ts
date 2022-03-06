@@ -5,7 +5,7 @@ import {
 import { ObjectType } from '@nestjs/graphql'
 
 import { CommonDTO } from 'src/base/shared/dtos/common.dto'
-import { StudentDTO } from 'src/modules/students/dto/student.dto'
+import { StudentDTO } from 'src/modules/student/student.dto'
 
 @ObjectType('Discipline')
 @FilterableOffsetConnection('students', () => StudentDTO, {

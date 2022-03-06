@@ -1,7 +1,7 @@
 import { Column, Entity, JoinTable, ManyToMany } from 'typeorm'
 
 import { CommonEntity } from 'src/base/shared/entities/common.entity'
-import { Student } from 'src/modules/students/entities/student.entity'
+import { Student } from 'src/modules/student/student.entity'
 
 @Entity()
 export class Discipline extends CommonEntity {

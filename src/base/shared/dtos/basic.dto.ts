@@ -1,8 +1,8 @@
 import { FilterableField } from '@nestjs-query/query-graphql'
-import { ObjectType } from '@nestjs/graphql'
+import { ID, ObjectType } from '@nestjs/graphql'
 
 @ObjectType()
 export class BasicDTO {
-  @FilterableField()
-  id: string
+  @FilterableField(() => ID)
+  id!: string
 }

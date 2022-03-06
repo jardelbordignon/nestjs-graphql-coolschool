@@ -5,28 +5,29 @@ import {
 import { NestjsQueryTypeOrmModule } from '@nestjs-query/query-typeorm'
 import { Module } from '@nestjs/common'
 
-import { CreateStudentInput } from './dto/create-student.input'
-import { StudentDTO } from './dto/student.dto'
-import { UpdateStudentInput } from './dto/update-student.input'
-import { Student } from './entities/student.entity'
+import { CreateUserDTO, UpdateUserDTO, UserDTO } from './user.dto'
+import { User } from './user.entity'
+import { UserResolver } from './user.resolver'
+import { UserService } from './user.service'
 
 @Module({
   imports: [
     // https://doug-martin.github.io/nestjs-query/docs/introduction/example
     NestjsQueryGraphQLModule.forFeature({
-      imports: [NestjsQueryTypeOrmModule.forFeature([Student])],
+      imports: [NestjsQueryTypeOrmModule.forFeature([User])],
+      services: [UserService],
       resolvers: [
         {
-          DTOClass: StudentDTO,
-          EntityClass: Student,
-          CreateDTOClass: CreateStudentInput,
-          UpdateDTOClass: UpdateStudentInput,
+          ServiceClass: UserService,
+          DTOClass: UserDTO,
+          CreateDTOClass: CreateUserDTO,
+          UpdateDTOClass: UpdateUserDTO,
           enableTotalCount: true,
           pagingStrategy: PagingStrategies.OFFSET,
         },
       ],
     }),
   ],
-  providers: [],
+  providers: [UserResolver],
 })
-export class StudentsModule {}
+export class UserModule {}

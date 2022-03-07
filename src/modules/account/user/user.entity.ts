@@ -1,6 +1,6 @@
 import { Column, Entity, JoinColumn, OneToOne } from 'typeorm'
 
-import { Student } from '../student/student.entity'
+import { Student } from '../../student/student.entity'
 
 import { SoftEntity } from 'src/base/shared/entities/soft.entity'
 

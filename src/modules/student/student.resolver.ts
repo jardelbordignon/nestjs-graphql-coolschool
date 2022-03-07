@@ -3,7 +3,7 @@ import { FilterType, UpdateManyResponseType } from '@nestjs-query/query-graphql'
 import { UseGuards } from '@nestjs/common'
 import { Args, ID, Mutation, Resolver } from '@nestjs/graphql'
 
-import { JwtAuthGuard } from '../auth/auth.guard'
+import { JwtAuthGuard } from '../account/auth/auth.guard'
 
 import { StudentDTO } from './student.dto'
 import { StudentService } from './student.service'

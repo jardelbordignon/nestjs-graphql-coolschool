@@ -1,22 +1,18 @@
 import { Module } from '@nestjs/common'
 
-import { AuthModule } from './auth/auth.module'
+import { AccountModule } from './account/account.module'
 import { ContentsModule } from './contents/contents.module'
 import { DisciplinesModule } from './disciplines/disciplines.module'
 import { LessonsModule } from './lessons/lessons.module'
 import { StudentModule } from './student/student.module'
-import { UserTokenModule } from './user-token/user-token.module'
-import { UserModule } from './user/user.module'
 
 @Module({
   imports: [
-    AuthModule,
+    AccountModule,
     ContentsModule,
     DisciplinesModule,
     LessonsModule,
     StudentModule,
-    UserModule,
-    UserTokenModule,
   ],
 })
 export class ModulesModule {}

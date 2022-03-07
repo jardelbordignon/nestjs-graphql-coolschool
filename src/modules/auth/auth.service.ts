@@ -2,6 +2,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import { compare } from 'bcryptjs'
 
+import { UserTokenService } from '../user-token/user-token.service'
 import { UserDTO } from '../user/user.dto'
 import { UserService } from '../user/user.service'
 
@@ -12,6 +13,7 @@ import { AuthResponse, AuthenticatedUser } from './auth.type'
 export class AuthService {
   constructor(
     private userService: UserService,
+    private userTokenService: UserTokenService,
     private jwtService: JwtService
   ) {}
 
@@ -27,10 +29,30 @@ export class AuthService {
     if (!passwordMatch)
       throw new UnauthorizedException('Email and password do not match')
 
-    const payload = { username: user.name, sub: user.id }
+    // delete the user refreshToken if it exists
+    await this.userTokenService.deleteByUserId(user.id)
 
-    const accessToken = await this.jwtService.signAsync(payload)
-    const refreshToken = 'refreshToken'
+    // generate new tokens
+    const accessPayload = { sub: user.id }
+    const refreshPayload = { sub: user.id, email: user.email }
+
+    const accessToken = await this.jwtService.signAsync(accessPayload)
+    const refreshToken = await this.jwtService.signAsync(refreshPayload, {
+      secret: process.env.JWT_REFRESH_SECRET,
+      expiresIn: `${process.env.JWT_REFRESH_EXPIRES_IN_DAYS}d`,
+    })
+
+    const day = 1000 * 60 * 60 * 24
+    const expiresAt = new Date(
+      Date.now() + Number(process.env.JWT_REFRESH_EXPIRES_IN_DAYS) * day
+    )
+
+    // save the new refresh token
+    await this.userTokenService.createOne({
+      userId: user.id,
+      refreshToken,
+      expiresAt,
+    })
 
     const tokens = { accessToken, refreshToken }
 

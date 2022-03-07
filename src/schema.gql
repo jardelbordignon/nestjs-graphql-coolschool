@@ -18,14 +18,6 @@ input AddDisciplinesToStudentInput {
   relationIds: [ID!]!
 }
 
-input AddDisciplinesToUserInput {
-  """The id of the record."""
-  id: ID!
-
-  """The ids of the relations."""
-  relationIds: [ID!]!
-}
-
 input AddStudentsToDisciplineInput {
   """The id of the record."""
   id: ID!
@@ -192,6 +184,11 @@ input CreateManyStudentsInput {
   students: [CreateStudent!]!
 }
 
+input CreateManyUserTokensInput {
+  """Array of records to create"""
+  userTokens: [CreateUserToken!]!
+}
+
 input CreateManyUsersInput {
   """Array of records to create"""
   users: [CreateUser!]!
@@ -222,6 +219,11 @@ input CreateOneUserInput {
   user: CreateUser!
 }
 
+input CreateOneUserTokenInput {
+  """The record to create"""
+  userToken: CreateUserToken!
+}
+
 input CreateStudent {
   key: String!
   name: String!
@@ -231,6 +233,12 @@ input CreateUser {
   email: String!
   name: String!
   password: String!
+}
+
+input CreateUserToken {
+  expiresAt: DateTime!
+  refreshToken: String!
+  userId: String!
 }
 
 input DateFieldComparison {
@@ -283,6 +291,11 @@ input DeleteManyStudentsInput {
   filter: StudentDeleteFilter!
 }
 
+input DeleteManyUserTokensInput {
+  """Filter to find records to delete"""
+  filter: UserTokenDeleteFilter!
+}
+
 input DeleteManyUsersInput {
   """Filter to find records to delete"""
   filter: UserDeleteFilter!
@@ -309,6 +322,11 @@ input DeleteOneStudentInput {
 }
 
 input DeleteOneUserInput {
+  """The id of the record to delete."""
+  id: ID!
+}
+
+input DeleteOneUserTokenInput {
   """The id of the record to delete."""
   id: ID!
 }
@@ -584,53 +602,58 @@ input LessonUpdateFilter {
 type Mutation {
   addContentsToLesson(input: AddContentsToLessonInput!): Lesson!
   addDisciplinesToStudent(input: AddDisciplinesToStudentInput!): Student!
-  addDisciplinesToUser(input: AddDisciplinesToUserInput!): User!
   addStudentsToDiscipline(input: AddStudentsToDisciplineInput!): Discipline!
   createManyContents(input: CreateManyContentsInput!): [Content!]!
   createManyDisciplines(input: CreateManyDisciplinesInput!): [Discipline!]!
   createManyLessons(input: CreateManyLessonsInput!): [Lesson!]!
   createManyStudents(input: CreateManyStudentsInput!): [Student!]!
+  createManyUserTokens(input: CreateManyUserTokensInput!): [UserToken!]!
   createManyUsers(input: CreateManyUsersInput!): [User!]!
   createOneContent(input: CreateOneContentInput!): Content!
   createOneDiscipline(input: CreateOneDisciplineInput!): Discipline!
   createOneLesson(input: CreateOneLessonInput!): Lesson!
   createOneStudent(input: CreateOneStudentInput!): Student!
   createOneUser(input: CreateOneUserInput!): User!
+  createOneUserToken(input: CreateOneUserTokenInput!): UserToken!
   deleteManyContents(input: DeleteManyContentsInput!): DeleteManyResponse!
   deleteManyDisciplines(input: DeleteManyDisciplinesInput!): DeleteManyResponse!
   deleteManyLessons(input: DeleteManyLessonsInput!): DeleteManyResponse!
   deleteManyStudents(input: DeleteManyStudentsInput!): DeleteManyResponse!
+  deleteManyUserTokens(input: DeleteManyUserTokensInput!): DeleteManyResponse!
   deleteManyUsers(input: DeleteManyUsersInput!): DeleteManyResponse!
   deleteOneContent(input: DeleteOneContentInput!): ContentDeleteResponse!
   deleteOneDiscipline(input: DeleteOneDisciplineInput!): DisciplineDeleteResponse!
   deleteOneLesson(input: DeleteOneLessonInput!): LessonDeleteResponse!
   deleteOneStudent(input: DeleteOneStudentInput!): StudentDeleteResponse!
   deleteOneUser(input: DeleteOneUserInput!): UserDeleteResponse!
+  deleteOneUserToken(input: DeleteOneUserTokenInput!): UserTokenDeleteResponse!
   login(input: AuthInput!): AuthResponse!
   removeContentsFromLesson(input: RemoveContentsFromLessonInput!): Lesson!
   removeDisciplinesFromStudent(input: RemoveDisciplinesFromStudentInput!): Student!
-  removeDisciplinesFromUser(input: RemoveDisciplinesFromUserInput!): User!
   removeLessonFromContent(input: RemoveLessonFromContentInput!): Content!
   removeStudentsFromDiscipline(input: RemoveStudentsFromDisciplineInput!): Discipline!
+  removeUserFromUserToken(input: RemoveUserFromUserTokenInput!): UserToken!
   restoreManyStudents(input: StudentFilter!): UpdateManyResponse!
   restoreManyUsers(input: UserFilter!): UpdateManyResponse!
   restoreOneStudent(input: ID!): Student!
   restoreOneUser(input: ID!): User!
   setContentsOnLesson(input: SetContentsOnLessonInput!): Lesson!
   setDisciplinesOnStudent(input: SetDisciplinesOnStudentInput!): Student!
-  setDisciplinesOnUser(input: SetDisciplinesOnUserInput!): User!
   setLessonOnContent(input: SetLessonOnContentInput!): Content!
   setStudentsOnDiscipline(input: SetStudentsOnDisciplineInput!): Discipline!
+  setUserOnUserToken(input: SetUserOnUserTokenInput!): UserToken!
   updateManyContents(input: UpdateManyContentsInput!): UpdateManyResponse!
   updateManyDisciplines(input: UpdateManyDisciplinesInput!): UpdateManyResponse!
   updateManyLessons(input: UpdateManyLessonsInput!): UpdateManyResponse!
   updateManyStudents(input: UpdateManyStudentsInput!): UpdateManyResponse!
+  updateManyUserTokens(input: UpdateManyUserTokensInput!): UpdateManyResponse!
   updateManyUsers(input: UpdateManyUsersInput!): UpdateManyResponse!
   updateOneContent(input: UpdateOneContentInput!): Content!
   updateOneDiscipline(input: UpdateOneDisciplineInput!): Discipline!
   updateOneLesson(input: UpdateOneLessonInput!): Lesson!
   updateOneStudent(input: UpdateOneStudentInput!): Student!
   updateOneUser(input: UpdateOneUserInput!): User!
+  updateOneUserToken(input: UpdateOneUserTokenInput!): UserToken!
 }
 
 type OffsetPageInfo {
@@ -711,6 +734,20 @@ type Query {
     """The id of the record to find."""
     id: ID!
   ): User
+  userToken(
+    """The id of the record to find."""
+    id: ID!
+  ): UserToken
+  userTokens(
+    """Specify to filter the records returned."""
+    filter: UserTokenFilter = {}
+
+    """Limit or page results."""
+    paging: OffsetPaging = {limit: 10}
+
+    """Specify to sort results."""
+    sorting: [UserTokenSort!] = []
+  ): UserTokenConnection!
   users(
     """Specify to filter the records returned."""
     filter: UserFilter = {}
@@ -739,14 +776,6 @@ input RemoveDisciplinesFromStudentInput {
   relationIds: [ID!]!
 }
 
-input RemoveDisciplinesFromUserInput {
-  """The id of the record."""
-  id: ID!
-
-  """The ids of the relations."""
-  relationIds: [ID!]!
-}
-
 input RemoveLessonFromContentInput {
   """The id of the record."""
   id: ID!
@@ -763,6 +792,14 @@ input RemoveStudentsFromDisciplineInput {
   relationIds: [ID!]!
 }
 
+input RemoveUserFromUserTokenInput {
+  """The id of the record."""
+  id: ID!
+
+  """The id of relation."""
+  relationId: ID!
+}
+
 input SetContentsOnLessonInput {
   """The id of the record."""
   id: ID!
@@ -772,14 +809,6 @@ input SetContentsOnLessonInput {
 }
 
 input SetDisciplinesOnStudentInput {
-  """The id of the record."""
-  id: ID!
-
-  """The ids of the relations."""
-  relationIds: [ID!]!
-}
-
-input SetDisciplinesOnUserInput {
   """The id of the record."""
   id: ID!
 
@@ -801,6 +830,14 @@ input SetStudentsOnDisciplineInput {
 
   """The ids of the relations."""
   relationIds: [ID!]!
+}
+
+input SetUserOnUserTokenInput {
+  """The id of the record."""
+  id: ID!
+
+  """The id of relation."""
+  relationId: ID!
 }
 
 """Sort Directions"""
@@ -1034,6 +1071,14 @@ input UpdateManyStudentsInput {
   update: UpdateStudent!
 }
 
+input UpdateManyUserTokensInput {
+  """Filter used to find fields to update"""
+  filter: UserTokenUpdateFilter!
+
+  """The update to apply to all records found using the filter"""
+  update: UpdateUserToken!
+}
+
 input UpdateManyUsersInput {
   """Filter used to find fields to update"""
   filter: UserUpdateFilter!
@@ -1082,6 +1127,14 @@ input UpdateOneUserInput {
   update: UpdateUser!
 }
 
+input UpdateOneUserTokenInput {
+  """The id of the record to update"""
+  id: ID!
+
+  """The update to apply."""
+  update: UpdateUserToken!
+}
+
 input UpdateStudent {
   key: String
   name: String
@@ -1093,19 +1146,16 @@ input UpdateUser {
   password: String
 }
 
+input UpdateUserToken {
+  expiresAt: DateTime
+  id: ID
+  refreshToken: String
+  userId: String
+}
+
 type User {
   createdAt: DateTime!
   deletedAt: DateTime
-  disciplines(
-    """Specify to filter the records returned."""
-    filter: DisciplineFilter = {}
-
-    """Limit or page results."""
-    paging: OffsetPaging = {limit: 10}
-
-    """Specify to sort results."""
-    sorting: [DisciplineSort!] = []
-  ): UserDisciplinesConnection
   email: String!
   id: ID!
   name: String!
@@ -1161,35 +1211,14 @@ type UserDeleteResponse {
   updatedAt: DateTime
 }
 
-type UserDisciplinesConnection {
-  """Array of nodes."""
-  nodes: [Discipline!]!
-
-  """Paging information"""
-  pageInfo: OffsetPageInfo!
-
-  """Fetch total count of records"""
-  totalCount: Int!
-}
-
 input UserFilter {
   and: [UserFilter!]
   createdAt: DateFieldComparison
   deletedAt: DateFieldComparison
-  disciplines: UserFilterDisciplineFilter
   email: StringFieldComparison
   id: IDFilterComparison
   name: StringFieldComparison
   or: [UserFilter!]
-  updatedAt: DateFieldComparison
-}
-
-input UserFilterDisciplineFilter {
-  and: [UserFilterDisciplineFilter!]
-  createdAt: DateFieldComparison
-  id: IDFilterComparison
-  name: StringFieldComparison
-  or: [UserFilterDisciplineFilter!]
   updatedAt: DateFieldComparison
 }
 
@@ -1224,6 +1253,104 @@ enum UserSortFields {
   id
   name
   updatedAt
+}
+
+type UserToken {
+  expiresAt: DateTime!
+  id: ID!
+  refreshToken: String!
+  user: User!
+  userId: String!
+}
+
+type UserTokenAggregateGroupBy {
+  id: ID
+  refreshToken: String
+  userId: String
+}
+
+type UserTokenConnection {
+  """Array of nodes."""
+  nodes: [UserToken!]!
+
+  """Paging information"""
+  pageInfo: OffsetPageInfo!
+
+  """Fetch total count of records"""
+  totalCount: Int!
+}
+
+type UserTokenCountAggregate {
+  id: Int
+  refreshToken: Int
+  userId: Int
+}
+
+input UserTokenDeleteFilter {
+  and: [UserTokenDeleteFilter!]
+  id: IDFilterComparison
+  or: [UserTokenDeleteFilter!]
+  refreshToken: StringFieldComparison
+  userId: StringFieldComparison
+}
+
+type UserTokenDeleteResponse {
+  expiresAt: DateTime
+  id: ID
+  refreshToken: String
+  userId: String
+}
+
+input UserTokenFilter {
+  and: [UserTokenFilter!]
+  id: IDFilterComparison
+  or: [UserTokenFilter!]
+  refreshToken: StringFieldComparison
+  user: UserTokenFilterUserFilter
+  userId: StringFieldComparison
+}
+
+input UserTokenFilterUserFilter {
+  and: [UserTokenFilterUserFilter!]
+  createdAt: DateFieldComparison
+  deletedAt: DateFieldComparison
+  email: StringFieldComparison
+  id: IDFilterComparison
+  name: StringFieldComparison
+  or: [UserTokenFilterUserFilter!]
+  updatedAt: DateFieldComparison
+}
+
+type UserTokenMaxAggregate {
+  id: ID
+  refreshToken: String
+  userId: String
+}
+
+type UserTokenMinAggregate {
+  id: ID
+  refreshToken: String
+  userId: String
+}
+
+input UserTokenSort {
+  direction: SortDirection!
+  field: UserTokenSortFields!
+  nulls: SortNulls
+}
+
+enum UserTokenSortFields {
+  id
+  refreshToken
+  userId
+}
+
+input UserTokenUpdateFilter {
+  and: [UserTokenUpdateFilter!]
+  id: IDFilterComparison
+  or: [UserTokenUpdateFilter!]
+  refreshToken: StringFieldComparison
+  userId: StringFieldComparison
 }
 
 input UserUpdateFilter {

@@ -1,17 +1,10 @@
-import {
-  FilterableField,
-  FilterableOffsetConnection,
-} from '@nestjs-query/query-graphql'
-import { Field, InputType, ObjectType, PartialType } from '@nestjs/graphql'
+import { FilterableField } from '@nestjs-query/query-graphql'
+import { InputType, ObjectType, PartialType } from '@nestjs/graphql'
 import { IsEmail, IsNotEmpty, IsString, MaxLength } from 'class-validator'
 
 import { SoftDTO } from 'src/base/shared/dtos/soft.dto'
-import { DisciplineDTO } from 'src/modules/disciplines/dto/discipline.dto'
 
 @ObjectType('User') // renomeia para o graphql, aparece como User no playground
-@FilterableOffsetConnection('disciplines', () => DisciplineDTO, {
-  nullable: true,
-})
 export class UserDTO extends SoftDTO {
   @FilterableField()
   name: string

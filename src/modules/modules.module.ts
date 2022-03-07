@@ -5,6 +5,7 @@ import { ContentsModule } from './contents/contents.module'
 import { DisciplinesModule } from './disciplines/disciplines.module'
 import { LessonsModule } from './lessons/lessons.module'
 import { StudentModule } from './student/student.module'
+import { UserTokenModule } from './user-token/user-token.module'
 import { UserModule } from './user/user.module'
 
 @Module({
@@ -15,6 +16,7 @@ import { UserModule } from './user/user.module'
     LessonsModule,
     StudentModule,
     UserModule,
+    UserTokenModule,
   ],
 })
 export class ModulesModule {}
